@@ -1,8 +1,8 @@
 # Python Arcade Game: StormPlane
 ## Objectives
-* The StormPlane is classical aircraft shooting game. The purpose of the game is to eliminate all the enemy planes from each game level. The more enemy planes you kill, the higher score you will get.
+* The StormPlane is a simple and addicting 2D aircraft shooting game where you play the role of a brave and daring fighter pilot. Dodge and weave your way around a war zone as you try to avoid enemy fire from all angles to survive. Destroy as many enemy aircraft as you can in this adventure to get higher scores. Your final goal of this game is to get through all the levels and score as many points as possible. Good luck brave Fighter Pilot! 
 ## Game Instructions
-* In the welcome page, the battlefield would pop up the screen as the player clicks on the "Start" button.
+* On the main menu screen, Click "Start" button to start the action.
 
 * The aircraft will automatically shoot bullets. Players only need to use the keyboard or touchpad to change the direction of the airplane.
 
@@ -16,13 +16,13 @@
 
 * At the end of each level, the boss enemy would appear from the top of the screen after a "boss warning" prompt. During the boss battle, player must use their strategies to defeat the boss in order to level up.
 
-* The game is divided by 4 levels. As level goes up, different attributes of enemy planes would relatively increase from the previous level. (e.x The speed of the enemy planes, HP values)
+* The game is divided by 4 levels. As level goes up, different attributes of enemy planes would relatively increase from the previous level. (e.x The speed of the enemy planes, HP values).
 
 * When the player defeats the final boss at the end of level 4, a "Victory" message would pop up the screen, which signals to the victory of the game. Besides, the scoring and time would show up on the ending page.
 
-* Rules for game props 
+* The HP bonus icon would drop from the top of the screen every 60s. When the player airplane catches the HP bonus, its health value would automatically increase by 30.
 
-* Operating Instruction: Use "W" key for Up; "A" key for Left; "D" key for Right; "S" key for Down; "Z" key for Laser Shooting 
+* Operating Instruction: Use "W" key for Up; "A" key for Left; "D" key for Right; "S" key for Down; "Z" key for Missile Shooting. 
 
 ## Scoring 
 
@@ -30,15 +30,34 @@
 
 | **Types of Enemy Planes**  | **Scoring** | **Images** |
 |:---:|:---:| : --- : |
-| small-sized |  10 | ![small_enemy](images/plane_small.png) |
+| small-sized |  10 | ![small_enemy](images/plane_small_new.png)|
 | middle-sized  |  50 | ![middle_enemy](images/bigplane0.png) |
-| large-sized  | 100  | ![large_enemy](images/boss0.png) |
-| boss_level_1  | 500  | ![boss_enemy_1](images/boss_2.png) |
-| boss_level_2  | 1000  | ![boss_enemy_2](images/boss_4.png) |
-| boss_level_3  | 2000  |![boss_enemy_3](images/boss_1.png) |
-| boss_level_4  | 4000  |![boss_enemy_4](images/boss_5.png) |
+| large-sized  | 100  | ![large_enemy](images/large_sized.png) |
+| boss_level_1  | 500  | ![boss_enemy_1](images/boss_1_new.png) |
+| boss_level_2  | 1000  | ![boss_enemy_2](images/boss_2_new.png) |
+| boss_level_3  | 2000  |![boss_enemy_3](images/boss_3_new.png) |
+| boss_level_4  | 4000  |![boss_enemy_4](images/boss_4_new.png) |
 
 * Every time the player's score increased by 1000, a star-shaped icon would show up on the screen, representing the remaining amount of laser beam.
+
+## Screen Mock-Ups
+* These are some actual screenshots of our game 
+
+![S_1](images/S_1.jpeg)
+![S_2](images/S_2.jpeg)
+![S_3](images/S_3.jpeg)
+![S_4](images/S_4.jpeg)
+![S_5](images/S_5.jpeg)
+![S_6](images/S_6.jpeg)
+![S_7](images/S_7.jpeg)
+![S_8](images/S_8.jpeg)
+![S_9](images/S_9.jpeg)
+![S_10](images/S_10.jpeg)
+
+
+
+
+
 
   
 
