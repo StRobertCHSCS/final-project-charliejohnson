@@ -1,6 +1,9 @@
 # Python Arcade Game: StormPlane
 ## Objectives
 * The StormPlane is a simple and addicting 2D aircraft shooting game where you play the role of a brave and daring fighter pilot. Dodge and weave your way around a war zone as you try to avoid enemy fire from all angles to survive. Destroy as many enemy aircraft as you can in this adventure to get higher scores. Your final goal of this game is to get through all the levels and score as many points as possible. Good luck brave Fighter Pilot! 
+* Try to get through all the levels and win the game is the final goal of this game, however, it is also necessary to achieve a higher mark after each time you played, as higher as you can. Do not be a coward, dodging enemy's planes for the whole game with none killed. COME ON, brave pilot never run away, kill the enemy face to face. Also, the only way to inter the next level is defeat the boss.
+* It is also important to finish the game with a good health level. Remember, as leveling up, bullets cause more damages to your aircraft. TRY TO WIN THE GAME WITH 100% HEALTH!!!
+
 ## Game Instructions
 * On the main menu screen, Click "Start" button to start the action.
 
@@ -43,6 +46,7 @@
 ## Screen Mock-Ups
 * These are some actual screenshots of our game 
 
+![S_0](images/S_0.jpeg)
 ![S_1](images/S_1.jpeg)
 ![S_2](images/S_2.jpeg)
 ![S_3](images/S_3.jpeg)
@@ -53,6 +57,8 @@
 ![S_8](images/S_8.jpeg)
 ![S_9](images/S_9.jpeg)
 ![S_10](images/S_10.jpeg)
+![S_11](images/S_11.jpeg)
+
 
 
 
