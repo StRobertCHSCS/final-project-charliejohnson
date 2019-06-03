@@ -17,6 +17,7 @@ explode = 0
 explode_x = 0
 explode_y = 0
 fps = 0
+boss_create_fps = 0
 
 position_y_1 = 600
 position_y_2 = 0
@@ -33,13 +34,23 @@ laser_bomb = False
 laser_effect = 0
 laser_fps = 0
 
-# 计算laser填充
+# Calculate the remaining missile
 laser_counter = 0
 laser_counter_update = 0
 
 class Enemy(arcade.Sprite):
     # pass attribute to enemy
     def __init__(self, image, scale, ehp, score, speed, boss):
+        """
+        Initialize an enemy with information passed in.
+
+        :param image: enemy image
+        :param scale: enemy scale
+        :param ehp: enemy hit points
+        :param score: kill enemy score
+        :param speed: enemy speed
+        :param boss: enemy type, True when he is boss
+        """
         arcade.Sprite.__init__(self, image, scale)
         self.ehp = ehp
         self.score = score
@@ -49,6 +60,12 @@ class Enemy(arcade.Sprite):
 
     # self armo damage, hhp
     def hitted(self, hhp):
+        """
+        Enemy hit by self bullet. Return boss kill information and killed coordinates.
+
+        :param hhp: self bullet damage to the enemy
+        :return: Tuple, represents boss killed(1), otherwise(0); killed xy coordinates in order.
+        """
         global Score
         self.ehp = max(0, self.ehp - hhp)
         if self.ehp == 0:
@@ -60,6 +77,10 @@ class Enemy(arcade.Sprite):
         return (0, 0, 0)
 
     def drop(self):
+        """
+        Update enemy location
+        :return: None
+        """
         if self.boss and self.center_y <= 450:
 
             if self.center_x <= 100:
@@ -89,6 +110,12 @@ class MyGame(arcade.Window):
     """ Main application class """
 
     def __init__(self, width, height, title):
+        """
+        Initialize the game window
+        :param width: window width
+        :param height: window height
+        :param title: window title
+        """
         super().__init__(width, height, title)
 
         # Set the working directory (where we expect to find files) to the same
@@ -106,6 +133,8 @@ class MyGame(arcade.Window):
         self.bullet_self_list = None
         self.player_list = None
         self.player = None
+        self.assist = None
+        self.bonus = None
 
         # self.current_state = INSTRUCTIONS_PAGE_0
 
@@ -126,7 +155,9 @@ class MyGame(arcade.Window):
 
 
     def on_draw(self):
-        """Render the screen. """
+        """Render the screen.
+        :return: None
+        """
         global Score, position_y_1, position_y_2, level, prompt, boss_hp, boss_hp_current, laser_effect, INSTRUCTIONS_PAGE_0, INSTRUCTIONS_PAGE_1
         global GAME_RUNNING, GAME_OVER
         arcade.start_render()
@@ -146,7 +177,7 @@ class MyGame(arcade.Window):
         #     self.draw_game()
         #     self.draw_game_over()
 
-        # add background and boss
+        # Draw background and boss for each level
         if level == 0:
             texture_1 = arcade.load_texture("images/bg_0.jpg")
             arcade.draw_texture_rectangle(400, position_y_1, 800, 600, texture_1)
@@ -175,12 +206,15 @@ class MyGame(arcade.Window):
             arcade.draw_texture_rectangle(400, position_y_2, 800, 600, texture_1)
             texture_0 = arcade.load_texture("images/boss_5.png")
 
-
+        # draw images
         self.enemy_list.draw()
         self.bullet_list.draw()
         self.player_list.draw()
         self.bullet_self_list.draw()
+        self.assist.draw()
+        self.bonus.draw()
 
+        # boss killed explode animation
         if explode == 1:
             arcade.draw_texture_rectangle(explode_x, explode_y, 240, 180, texture_0)
             texture_1 = arcade.load_texture("images/bigairplane3.png")
@@ -195,21 +229,114 @@ class MyGame(arcade.Window):
             arcade.draw_texture_rectangle(explode_x, explode_y, 90, 90, texture_1)
         elif explode == 4:
             texture_0 = arcade.load_texture("images/bg_road.png")
-            arcade.draw_texture_rectangle(400, 300, 300, 280, texture_0)
+            arcade.draw_texture_rectangle(400, 300, 450, 430, texture_0)
 
 
-        if laser_effect == 1:
-            arcade.draw_texture_rectangle(self.player.center_x, self.player.center_y+300, 30, 600, arcade.load_texture("images/bomb_laser6.png"))
-        elif laser_effect == 2:
-            arcade.draw_texture_rectangle(self.player.center_x, self.player.center_y+300, 30, 600, arcade.load_texture("images/bomb_laser7.png"))
-        elif laser_effect == 3:
-            arcade.draw_texture_rectangle(self.player.center_x, self.player.center_y+300, 30, 600, arcade.load_texture("images/bomb_laser8.png"))
-        elif laser_effect == 4:
-            arcade.draw_texture_rectangle(self.player.center_x, self.player.center_y+300, 30, 600, arcade.load_texture("images/bomb_laser9.png"))
-        elif laser_effect == 5:
-            arcade.draw_texture_rectangle(self.player.center_x, self.player.center_y+300, 30, 600, arcade.load_texture("images/bomb_laser10.png"))
-        elif laser_effect == 6:
-            arcade.draw_texture_rectangle(self.player.center_x, self.player.center_y+300, 30, 600, arcade.load_texture("images/bomb_laser11.png"))
+
+
+        # Draw different boss lasers
+        for b in self.enemy_list:
+            if level == 0:
+                if laser_effect == 1:
+                    arcade.draw_texture_rectangle(b.center_x, b.center_y-300, 30, 600, arcade.load_texture("images/bomb_laser6.png"))
+                elif laser_effect == 2:
+                    arcade.draw_texture_rectangle(b.center_x, b.center_y-300, 30, 600, arcade.load_texture("images/bomb_laser7.png"))
+                elif laser_effect == 3:
+                    arcade.draw_texture_rectangle(b.center_x, b.center_y-300, 30, 600, arcade.load_texture("images/bomb_laser8.png"))
+                elif laser_effect == 4:
+                    arcade.draw_texture_rectangle(b.center_x, b.center_y-300, 30, 600, arcade.load_texture("images/bomb_laser9.png"))
+                elif laser_effect == 5:
+                    arcade.draw_texture_rectangle(b.center_x, b.center_y-300, 30, 600, arcade.load_texture("images/bomb_laser10.png"))
+                elif laser_effect == 6:
+                    arcade.draw_texture_rectangle(b.center_x, b.center_y-300, 30, 600, arcade.load_texture("images/bomb_laser11.png"))
+
+            if level == 1:
+                if laser_effect == 1:
+                    arcade.draw_texture_rectangle(b.center_x, b.center_y-300, 30, 600, arcade.load_texture("images/bomb_laser6.png"))
+                elif laser_effect == 2:
+                    arcade.draw_texture_rectangle(b.center_x, b.center_y-300, 30, 600, arcade.load_texture("images/bomb_laser7.png"))
+                elif laser_effect == 3:
+                    arcade.draw_texture_rectangle(b.center_x, b.center_y-300, 30, 600, arcade.load_texture("images/bomb_laser8.png"))
+                elif laser_effect == 4:
+                    arcade.draw_texture_rectangle(b.center_x, b.center_y-300, 30, 600, arcade.load_texture("images/bomb_laser9.png"))
+                elif laser_effect == 5:
+                    arcade.draw_texture_rectangle(b.center_x, b.center_y-300, 30, 600, arcade.load_texture("images/bomb_laser10.png"))
+                elif laser_effect == 6:
+                    arcade.draw_texture_rectangle(b.center_x, b.center_y-300, 30, 600, arcade.load_texture("images/bomb_laser11.png"))
+
+            if level == 2:
+                if laser_effect == 1:
+                    arcade.draw_texture_rectangle(b.center_x - 40 , b.center_y-300, 30, 600, arcade.load_texture("images/bomb_laser6.png"))
+                    arcade.draw_texture_rectangle(b.center_x + 30, b.center_y-300, 30, 600, arcade.load_texture("images/bomb_laser6.png"))
+                elif laser_effect == 2:
+                    arcade.draw_texture_rectangle(b.center_x - 40, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser7.png"))
+                    arcade.draw_texture_rectangle(b.center_x + 30, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser7.png"))
+                elif laser_effect == 3:
+                    arcade.draw_texture_rectangle(b.center_x - 40, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser8.png"))
+                    arcade.draw_texture_rectangle(b.center_x + 30, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser8.png"))
+                elif laser_effect == 4:
+                    arcade.draw_texture_rectangle(b.center_x - 40, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser9.png"))
+                    arcade.draw_texture_rectangle(b.center_x + 30, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser9.png"))
+                elif laser_effect == 5:
+                    arcade.draw_texture_rectangle(b.center_x - 40, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser10.png"))
+                    arcade.draw_texture_rectangle(b.center_x + 30, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser10.png"))
+                elif laser_effect == 6:
+                    arcade.draw_texture_rectangle(b.center_x - 40, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser11.png"))
+                    arcade.draw_texture_rectangle(b.center_x + 30, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser11.png"))
+
+            if level == 3:
+                if laser_effect == 1:
+                    arcade.draw_texture_rectangle(b.center_x - 40, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser6.png"))
+                    arcade.draw_texture_rectangle(b.center_x, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser6.png"))
+                    arcade.draw_texture_rectangle(b.center_x + 30, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser6.png"))
+                elif laser_effect == 2:
+                    arcade.draw_texture_rectangle(b.center_x - 40, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser7.png"))
+                    arcade.draw_texture_rectangle(b.center_x, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser7.png"))
+                    arcade.draw_texture_rectangle(b.center_x + 30, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser7.png"))
+                elif laser_effect == 3:
+                    arcade.draw_texture_rectangle(b.center_x - 40, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser8.png"))
+                    arcade.draw_texture_rectangle(b.center_x, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser8.png"))
+                    arcade.draw_texture_rectangle(b.center_x + 30, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser8.png"))
+                elif laser_effect == 4:
+                    arcade.draw_texture_rectangle(b.center_x - 40, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser9.png"))
+                    arcade.draw_texture_rectangle(b.center_x, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser9.png"))
+                    arcade.draw_texture_rectangle(b.center_x + 30, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser9.png"))
+                elif laser_effect == 5:
+                    arcade.draw_texture_rectangle(b.center_x - 40, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser10.png"))
+                    arcade.draw_texture_rectangle(b.center_x, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser10.png"))
+                    arcade.draw_texture_rectangle(b.center_x + 30, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser10.png"))
+                elif laser_effect == 6:
+                    arcade.draw_texture_rectangle(b.center_x - 40, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser11.png"))
+                    arcade.draw_texture_rectangle(b.center_x, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser11.png"))
+                    arcade.draw_texture_rectangle(b.center_x + 30, b.center_y - 300, 30, 600,
+                                                  arcade.load_texture("images/bomb_laser11.png"))
 
 
 
@@ -220,7 +347,7 @@ class MyGame(arcade.Window):
         if self.boss:
             arcade.draw_lrtb_rectangle_outline(300, 500, 580, 560, arcade.color.BLACK, 2)
             arcade.draw_lrtb_rectangle_filled(302, 302 + (198 * boss_hp_current) // boss_hp, 578, 562, arcade.color.RADICAL_RED)
-        # arcade.draw_lrtb_rectangle_filled(600, 800, 600, 500, arcade.color.WHITE)
+
         arcade.draw_text("Score: {0:10.2f}".format(Score), 610, 560, arcade.color.WHITE, 12)
         arcade.draw_lrtb_rectangle_outline(60, 170, 580, 560, arcade.color.WHITE, 2)
         arcade.draw_lrtb_rectangle_filled(62, 62 + (106*self.hp)//100, 578, 562, arcade.color.WHITE)
@@ -232,11 +359,18 @@ class MyGame(arcade.Window):
 
 
     def setup(self):
+        """
+        Initialize game interface. Default schedule is 60 fps.
+        :return: None
+        """
         arcade.schedule(self.on_update, 1/60)
         self.enemy_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
         self.player_list = arcade.SpriteList()
         self.bullet_self_list = arcade.SpriteList()
+        self.assist = arcade.SpriteList()
+        self.bonus = arcade.SpriteList()
+
         # Add player ship
         self.player = arcade.Sprite("images/SeHero.png", 0.6)
 
@@ -272,6 +406,10 @@ class MyGame(arcade.Window):
 
 
     def dead(self):
+        """
+        Clear the screen when dead
+        :return: None
+        """
         self.enemy_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
         self.player_list = arcade.SpriteList()
@@ -283,6 +421,7 @@ class MyGame(arcade.Window):
         """All the logic to move, and the game logic goes here. """
         global explode, explode_x, explode_y, fps, position_y_1, position_y_2, level, prompt, prompt_time, boss_hp, boss_hp_current
         global up_pressed, down_pressed, left_pressed, right_pressed, laser_bomb, laser_effect, laser_fps, laser_counter, laser_counter_update
+        global boss_create_fps
 
         if True:
             laser_counter = Score // 1000 + 1
@@ -293,6 +432,14 @@ class MyGame(arcade.Window):
             if self.hp <= 0:
                 self.dead()
             else:
+                # drop hp bonus every 60s
+                if self.frame_count % 3600 == 3599:
+                    bonus_hp = arcade.Sprite("images/award2.png", 0.6)
+                    bonus_hp.center_x = random.randrange(0, SCREEN_WIDTH)
+                    bonus_hp.center_y = random.randrange(SCREEN_HEIGHT, SCREEN_HEIGHT * 1.25)
+                    self.bonus.append(bonus_hp)
+
+
                 if self.frame_count % 180 == 0 and not self.boss and not 1 <= explode <= 4:
                     for _ in range(2):
                     # generate random enemy planes
@@ -313,11 +460,11 @@ class MyGame(arcade.Window):
                 # create a boss and ensure no small enemies appear during the boss battle
                 elif self.frame_count - fps == (1799*(level+1)) and not self.boss and not 1 <= explode <= 4:
                     # 提示
-
+                    boss_create_fps = self.frame_count
                     prompt = True
                     prompt_time = self.frame_count
 
-
+                    # update boss based on game level
                     if level == 0:
                         enemy = Enemy("images/boss_2.png", 0.8, 20, 500, 2, True)
                     elif level == 1:
@@ -327,7 +474,6 @@ class MyGame(arcade.Window):
                     elif level == 3:
                         enemy = Enemy("images/boss_5.png", 0.8, 50, 4000, 3, True)
 
-                    # add boss
 
                     enemy.center_x = random.randrange(0, SCREEN_WIDTH)
                     enemy.center_y = SCREEN_HEIGHT * 2
@@ -336,31 +482,47 @@ class MyGame(arcade.Window):
                     self.boss = True
                     boss_hp = enemy.ehp
 
-
+                # set time for boss prompt to be 3s
                 if self.frame_count - prompt_time == 180 and prompt:
                     prompt = False
 
+                for boss in self.enemy_list:
+                    if 1 <= laser_effect <= 6:
+                        for e in self.bullet_self_list:
+                            # kill self bullet
+                            if boss.center_x - 20 <= e.center_x <= boss.center_x + 20:
+                                e.kill()
+                        # hit by laser --- lose hp
+                        if level == 0:
+                            if self.player.center_x - 36 < boss.center_x < self.player.center_x + 36:
+                                self.hp = max(0, self.hp - 0.8)
+                        if level == 1:
+                            if self.player.center_x - 36 < boss.center_x < self.player.center_x + 36:
+                                self.hp = max(0, self.hp - 0.9)
+                        if level == 2:
+                            if self.player.center_x - 36 < boss.center_x - 45 < self.player.center_x + 36 or self.player.center_x - 36 < boss.center_x + 15 < self.player.center_x + 36:
+                                self.hp = max(0, self.hp - 1)
+                        if level == 3:
+                            if self.player.center_x - 36 < boss.center_x - 45 < self.player.center_x + 36 or self.player.center_x - 36 < boss.center_x < self.player.center_x + 36 or self.player.center_x - 36 < boss.center_x + 15 < self.player.center_x + 36:
+                                self.hp = max(0, self.hp - 1.1)
 
-                if 1 <= laser_effect <= 6:
-                    for e in self.bullet_list:
-                        if self.player.center_x - 40 <= e.center_x <= self.player.center_x + 40:
-                            e.kill()
-                    for e in self.enemy_list:
-                        if self.player.center_x - 40 <= e.center_x <= self.player.center_x + 40:
-                            boss_hit = e.hitted(20)
-                            if boss_hit[0] == 1:
-                                self.boss = False
+                    # for e in self.enemy_list:
+                    #     if self.player.center_x - 40 <= e.center_x <= self.player.center_x + 40:
+                    #         boss_hit = e.hitted(20)
+                    #         if boss_hit[0] == 1:
+                    #             self.boss = False
+                    #
+                    #             lvl_clear = True
+                    #
+                    #             explode = 1
+                    #             explode_x = boss_hit[1]
+                    #             explode_y = boss_hit[2]
+                    #             fps = self.frame_count
 
-                                lvl_clear = True
-
-                                explode = 1
-                                explode_x = boss_hit[1]
-                                explode_y = boss_hit[2]
-                                fps = self.frame_count
-
-
+                # update the frame_count
                 self.frame_count += 1
 
+                # update the background position
                 position_y_1 -= 1
                 position_y_2 -= 1
 
@@ -397,14 +559,34 @@ class MyGame(arcade.Window):
                         if boss_hit[0] == 1:
                             self.boss = False
 
-                            lvl_clear = True
+                            explode = 1
+                            explode_x = boss_hit[1]
+                            explode_y = boss_hit[2]
+                            fps = self.frame_count
+
+                for bomb in self.assist:
+                    bullet_hit_list = arcade.check_for_collision_with_list(bomb, self.bullet_list)
+
+                    for b in bullet_hit_list:
+                        b.kill()
+
+                # collision with boss (missile)
+                for e in self.enemy_list:
+                    if e.boss:
+                        boss_hp_current = e.ehp
+                    bullet_hit_list = arcade.check_for_collision_with_list(e, self.assist)
+                    for bullet_hit in bullet_hit_list:
+
+                        boss_hit = e.hitted(0.3)
+                        if boss_hit[0] == 1:
+                            self.boss = False
 
                             explode = 1
                             explode_x = boss_hit[1]
                             explode_y = boss_hit[2]
                             fps = self.frame_count
 
-
+                # boss explode animation
                 if explode == 1 and self.frame_count - fps == 20:
                     explode += 1
                 elif explode == 2 and self.frame_count - fps == 40:
@@ -474,17 +656,18 @@ class MyGame(arcade.Window):
                         bullet.center_y = start_y
                         bullet.angle = 0
                         bullet.change_x = 0
-                        bullet.change_y = - BULLET_SPEED
+                        bullet.change_y = - BULLET_SPEED * (level//3 + 1)
                         self.bullet_list.append(bullet)
                     elif self.frame_count % (120 - 20*level) == 0:
                         bullet = arcade.Sprite("images/Bomb1.png", 0.5)
                         bullet.center_x = start_x
                         bullet.center_y = start_y
                         bullet.angle = math.degrees(angle)
-                        bullet.change_x = math.cos(angle) * BULLET_SPEED
-                        bullet.change_y = math.sin(angle) * BULLET_SPEED
+                        bullet.change_x = math.cos(angle) * BULLET_SPEED * (level//3 + 1)
+                        bullet.change_y = math.sin(angle) * BULLET_SPEED * (level//3 + 1)
                         self.bullet_list.append(bullet)
 
+                # determine the shooting frequency
                 if self.frame_count % 15 == 0:
                     bullet = arcade.Sprite("images/Bomb2.png", 0.7)
                     bullet.center_x = self.player.center_x
@@ -505,38 +688,74 @@ class MyGame(arcade.Window):
                     if bullet.bottom > 600:
                         bullet.kill()
 
+                for bullet in self.assist:
+                    if bullet.bottom > 600:
+                        bullet.kill()
+
                 for bullet in self.bullet_list:
                     if bullet.top < 0:
                         bullet.kill()
 
+                # hp_bonus
+                for hp_bonus in self.bonus:
+                    hp_bonus.center_y -= 5
+                    if arcade.check_for_collision(self.player, hp_bonus):
+                        self.hp = min(100, self.hp + 30)
+                        hp_bonus.kill()
+                    if hp_bonus.top < 0:
+                        hp_bonus.kill()
+
                 # keyboard control
                 if up_pressed:
-                    self.player.center_y += 5
+                    self.player.center_y = min(552, self.player.center_y + 5)
                 if down_pressed:
-                    self.player.center_y -= 5
+                    self.player.center_y = max(48, self.player.center_y - 5)
                 if left_pressed:
-                    self.player.center_x -= 5
+                    self.player.center_x = max(36, self.player.center_x - 5)
                 if right_pressed:
-                    self.player.center_x += 5
+                    self.player.center_x = min(764, self.player.center_x + 5)
 
-                # trigger the laser
-                if laser_bomb and self.laser_player > 0:
+                # trigger the missile
+                if laser_bomb and self.laser_player > 0 and len(self.assist) <= 1:
+
+
+                    assist_bomb = arcade.Sprite("images/assisent1_1.png", 1)
+                    assist_bomb.center_x = self.player.center_x - 25
+                    assist_bomb.center_y = self.player.center_y
+                    assist_bomb.angle = 0
+                    assist_bomb.change_x = 0
+                    assist_bomb.change_y = 10
+                    self.assist.append(assist_bomb)
+
+                    assist_bomb = arcade.Sprite("images/assisent1_1.png", 1)
+                    assist_bomb.center_x = self.player.center_x + 25
+                    assist_bomb.center_y = self.player.center_y
+                    assist_bomb.angle = 0
+                    assist_bomb.change_x = 0
+                    assist_bomb.change_y = 10
+                    self.assist.append(assist_bomb)
+                    self.laser_player -= 1
+
+                if self.boss and (self.frame_count - boss_create_fps) % 480 == 0 and (self.frame_count - boss_create_fps) != 0:
                     laser_effect = 1
                     laser_fps = self.frame_count
 
-                if laser_effect == 1 and self.frame_count - laser_fps == 30:
+                if self.frame_count % 60 == 0:
+                    print(self.frame_count, boss_create_fps, laser_effect)
+
+
+                if laser_effect == 1 and self.frame_count - laser_fps == 20:
                     laser_effect += 1
-                elif laser_effect == 2 and self.frame_count - laser_fps == 60:
+                elif laser_effect == 2 and self.frame_count - laser_fps == 40:
                     laser_effect += 1
-                elif laser_effect == 3 and self.frame_count - laser_fps == 90:
+                elif laser_effect == 3 and self.frame_count - laser_fps == 60:
                     laser_effect += 1
-                elif laser_effect == 4 and self.frame_count - laser_fps == 120:
+                elif laser_effect == 4 and self.frame_count - laser_fps == 80:
                     laser_effect += 1
-                elif laser_effect == 5 and self.frame_count - laser_fps == 150:
+                elif laser_effect == 5 and self.frame_count - laser_fps == 100:
                     laser_effect += 1
-                elif laser_effect == 6 and self.frame_count - laser_fps == 180:
+                elif laser_effect == 6 and self.frame_count - laser_fps == 120:
                     laser_effect += 1
-                    self.laser_player -= 1
 
                 for e in self.enemy_list:
                     e.drop()
@@ -547,9 +766,17 @@ class MyGame(arcade.Window):
 
                 self.bullet_list.update()
                 self.bullet_self_list.update()
+                self.assist.update()
 
     def on_mouse_motion(self, x, y, delta_x, delta_y):
-        """Called whenever the mouse moves. """
+        """
+        Called whenever the mouse moves.
+        :param x: player x-location
+        :param y: player y-location
+        :param delta_x: player delta x
+        :param delta_y: player delta y
+        :return: None
+        """
         self.player.center_x = x
         self.player.center_y = y
 
@@ -576,6 +803,13 @@ class MyGame(arcade.Window):
 
     #add margin to prevent the plane from going of the screen
     def on_key_press(self, key, modifier):
+        """
+        Detect user key input when a key is pressed
+
+        :param key: the particular key user pressed
+        :param modifier: default modifier
+        :return: None
+        """
         global up_pressed, down_pressed, left_pressed, right_pressed, laser_bomb
         if key == arcade.key.W:
             up_pressed = True
@@ -590,6 +824,13 @@ class MyGame(arcade.Window):
 
 
     def on_key_release(self, key, modifier):
+        """
+        Detect user key input when a key is released
+
+        :param key: the particular key user released
+        :param modifier: default modifier
+        :return: None
+        """
         global up_pressed, down_pressed, left_pressed, right_pressed, laser_bomb
         if key == arcade.key.W:
             up_pressed = False
@@ -607,7 +848,6 @@ up_pressed = False
 down_pressed = False
 left_pressed = False
 right_pressed = False
-
 
 
 def main():
