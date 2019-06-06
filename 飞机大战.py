@@ -142,13 +142,22 @@ class MyGame(arcade.Window):
 
 
         # self.current_state = INSTRUCTIONS_PAGE_0
-        #
+
         # self.instructions = []
-        # texture = arcade.load_texture("images/name.png")
+        # texture = arcade.load_texture("images/.png")
         # self.instructions.append(texture)
         #
         # texture = arcade.load_texture("images/start.png")
         # self.instructions.append(texture)
+
+    # def draw_instructions_page(self,page):
+    #     self.page = page
+    #     if self.page == 0:
+    #         self.texture = arcade.load_texture("images/fm.png")
+    #         arcade.draw_texture_rectangle(400,300,800,600,self.texture)
+    #
+    #
+
 
     def on_draw(self):
         """Render the screen.
@@ -158,6 +167,7 @@ class MyGame(arcade.Window):
         global GAME_RUNNING, GAME_OVER
         arcade.start_render()
         texture_0 = arcade.load_texture("images/bigairplane3.png")
+
 
         # if self.current_state == INSTRUCTIONS_PAGE_0:
         #     self.draw_instructions_page(0)
@@ -788,7 +798,7 @@ class MyGame(arcade.Window):
         #     self.current_state = GAME_RUNNING
 
 
-
+    #add margin to prevent the plane from going of the screen
     def on_key_press(self, key, modifier):
         """
         Detect user key input when a key is pressed
