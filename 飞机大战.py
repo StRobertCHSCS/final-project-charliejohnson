@@ -13,14 +13,14 @@ INSTRUCTIONS_PAGE_1 = 1
 GAME_RUNNING = 2
 GAME_OVER = 3
 
+position_y_1 = 600
+position_y_2 = 0
+
 explode = 0
 explode_x = 0
 explode_y = 0
 fps = 0
 boss_create_fps = 0
-
-position_y_1 = 600
-position_y_2 = 0
 
 level = 0
 # boss level prompt
@@ -37,6 +37,9 @@ laser_fps = 0
 # Calculate the remaining missile
 laser_counter = 0
 laser_counter_update = 0
+
+
+background_sound = arcade.load_sound("music/game_music.wav")
 
 class Enemy(arcade.Sprite):
     # pass attribute to enemy
@@ -57,6 +60,7 @@ class Enemy(arcade.Sprite):
         self.speed = speed
         self.boss = boss
         self.left_boss = True
+
 
     # self armo damage, hhp
     def hitted(self, hhp):
@@ -135,6 +139,7 @@ class MyGame(arcade.Window):
         self.player = None
         self.assist = None
         self.bonus = None
+
 
         # self.current_state = INSTRUCTIONS_PAGE_0
 
@@ -230,8 +235,6 @@ class MyGame(arcade.Window):
         elif explode == 4:
             texture_0 = arcade.load_texture("images/bg_road.png")
             arcade.draw_texture_rectangle(400, 300, 450, 430, texture_0)
-
-
 
 
         # Draw different boss lasers
@@ -348,6 +351,7 @@ class MyGame(arcade.Window):
             arcade.draw_lrtb_rectangle_outline(300, 500, 580, 560, arcade.color.BLACK, 2)
             arcade.draw_lrtb_rectangle_filled(302, 302 + (198 * boss_hp_current) // boss_hp, 578, 562, arcade.color.RADICAL_RED)
 
+        # show hp, current score, and remaining laser times on the screen
         arcade.draw_text("Score: {0:10.2f}".format(Score), 610, 560, arcade.color.WHITE, 12)
         arcade.draw_lrtb_rectangle_outline(60, 170, 580, 560, arcade.color.WHITE, 2)
         arcade.draw_lrtb_rectangle_filled(62, 62 + (106*self.hp)//100, 578, 562, arcade.color.WHITE)
@@ -382,7 +386,7 @@ class MyGame(arcade.Window):
     #
     #     page_texture = self.instructions[page_number]
     #     arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, page_texture.width, page_texture.height, page_texture, 0)
-    #
+
     # def draw_game_over(self):
     #
     #     output = "Game Over"
@@ -424,6 +428,7 @@ class MyGame(arcade.Window):
         global boss_create_fps
 
         if True:
+            # update remaining laser based on current score
             laser_counter = Score // 1000 + 1
             if laser_counter + laser_counter_update == 1:
                 self.laser_player += 1
@@ -439,10 +444,9 @@ class MyGame(arcade.Window):
                     bonus_hp.center_y = random.randrange(SCREEN_HEIGHT, SCREEN_HEIGHT * 1.25)
                     self.bonus.append(bonus_hp)
 
-
                 if self.frame_count % 180 == 0 and not self.boss and not 1 <= explode <= 4:
                     for _ in range(2):
-                    # generate random enemy planes
+                    # generate randomly enemy planes of different levels
                         ranNum = random.randint(0, 1000)
                         if ranNum < 500:
                             enemy = Enemy("images/plane_small.png", 0.8, 2, 10, 4, False)
@@ -464,7 +468,7 @@ class MyGame(arcade.Window):
                     prompt = True
                     prompt_time = self.frame_count
 
-                    # update boss based on game level
+                    # update boss image based on game level
                     if level == 0:
                         enemy = Enemy("images/boss_2.png", 0.8, 20, 500, 2, True)
                     elif level == 1:
@@ -486,13 +490,14 @@ class MyGame(arcade.Window):
                 if self.frame_count - prompt_time == 180 and prompt:
                     prompt = False
 
+                # update player's hp based on different damage levels from boss
                 for boss in self.enemy_list:
                     if 1 <= laser_effect <= 6:
+                        # realize the disappearance of self bullet when it hits boss
                         for e in self.bullet_self_list:
-                            # kill self bullet
                             if boss.center_x - 20 <= e.center_x <= boss.center_x + 20:
                                 e.kill()
-                        # hit by laser --- lose hp
+                        # calculate different damage levels of laser from boss
                         if level == 0:
                             if self.player.center_x - 36 < boss.center_x < self.player.center_x + 36:
                                 self.hp = max(0, self.hp - 0.8)
@@ -547,7 +552,7 @@ class MyGame(arcade.Window):
                     self.hp = max(0, self.hp - 30)
 
 
-                # hit enemy
+                # calculate different damage of player's bullet or bomb makes on enemy or boss
                 for e in self.enemy_list:
                     if e.boss:
                         boss_hp_current = e.ehp
@@ -570,7 +575,6 @@ class MyGame(arcade.Window):
                     for b in bullet_hit_list:
                         b.kill()
 
-                # collision with boss (missile)
                 for e in self.enemy_list:
                     if e.boss:
                         boss_hp_current = e.ehp
@@ -597,7 +601,7 @@ class MyGame(arcade.Window):
                     explode += 1
                     level += 1
 
-                # Loop through each enemy that we have
+                # use loop to make all enemies facing to the player
                 for enemy in self.enemy_list:
 
                     # First, calculate the angle to the player. We could do this
@@ -620,7 +624,7 @@ class MyGame(arcade.Window):
                     y_diff = dest_y - start_y
                     angle = math.atan2(y_diff, x_diff)
 
-                    # Set the enemy to face the player.
+                    # use if statement to exclude the boss angle
                     if self.boss:
                         enemy.angle = 0
                     else:
@@ -650,6 +654,7 @@ class MyGame(arcade.Window):
                     #
                     #     self.bullet_list.append(bullet)
 
+                    # determine the shooting characteristics of enemy / boss planes
                     if self.boss and self.frame_count % ((120 - 20 * level) // 2) == 0:
                         bullet = arcade.Sprite("images/boss_bomb.png", 0.5)
                         bullet.center_x = start_x
@@ -667,7 +672,7 @@ class MyGame(arcade.Window):
                         bullet.change_y = math.sin(angle) * BULLET_SPEED * (level//3 + 1)
                         self.bullet_list.append(bullet)
 
-                # determine the shooting frequency
+                # determine the shooting frequency of the player airplane
                 if self.frame_count % 15 == 0:
                     bullet = arcade.Sprite("images/Bomb2.png", 0.7)
                     bullet.center_x = self.player.center_x
@@ -683,7 +688,7 @@ class MyGame(arcade.Window):
 
                     self.bullet_self_list.append(bullet)
 
-                # Get rid of the bullet when it flies off-screen
+                # use loops to remove the bullet when it flies off-screen
                 for bullet in self.bullet_self_list:
                     if bullet.bottom > 600:
                         bullet.kill()
@@ -696,16 +701,18 @@ class MyGame(arcade.Window):
                     if bullet.top < 0:
                         bullet.kill()
 
-                # hp_bonus
+                # use loops to control the dropping of hp_bonus
                 for hp_bonus in self.bonus:
                     hp_bonus.center_y -= 5
+                    # update player's hp when it catches hp_bonus
                     if arcade.check_for_collision(self.player, hp_bonus):
                         self.hp = min(100, self.hp + 30)
                         hp_bonus.kill()
+                    # remove hp_bonus when it gets out of windows
                     if hp_bonus.top < 0:
                         hp_bonus.kill()
 
-                # keyboard control
+                # keyboard control the movement of the player
                 if up_pressed:
                     self.player.center_y = min(552, self.player.center_y + 5)
                 if down_pressed:
@@ -736,14 +743,12 @@ class MyGame(arcade.Window):
                     self.assist.append(assist_bomb)
                     self.laser_player -= 1
 
+                # use if statement to set the laser shooting period to be 8s
                 if self.boss and (self.frame_count - boss_create_fps) % 480 == 0 and (self.frame_count - boss_create_fps) != 0:
                     laser_effect = 1
                     laser_fps = self.frame_count
 
-                if self.frame_count % 60 == 0:
-                    print(self.frame_count, boss_create_fps, laser_effect)
-
-
+                # use if statement to animate laser
                 if laser_effect == 1 and self.frame_count - laser_fps == 20:
                     laser_effect += 1
                 elif laser_effect == 2 and self.frame_count - laser_fps == 40:
@@ -757,12 +762,13 @@ class MyGame(arcade.Window):
                 elif laser_effect == 6 and self.frame_count - laser_fps == 120:
                     laser_effect += 1
 
+                # realize the dropping of boss and enemy planes
                 for e in self.enemy_list:
                     e.drop()
 
-                # if level == 4:
-                #     self.current_state = GAME_OVER
-                #     self.set_mouse_visible(True)
+                if level == 4:
+                    self.current_state = GAME_OVER
+                    self.set_mouse_visible(True)
 
                 self.bullet_list.update()
                 self.bullet_self_list.update()
@@ -779,26 +785,17 @@ class MyGame(arcade.Window):
         """
         self.player.center_x = x
         self.player.center_y = y
-
-    # def on_mouse_press(self, x, y, button, modifiers):
-    #     """
-    #     Called when the user presses a mouse button.
-    #     """
-    #
-    #     # Change states as needed.
-    #     if self.current_state == INSTRUCTIONS_PAGE_0:
-    #         # Next page of instructions.
-    #         self.current_state = INSTRUCTIONS_PAGE_1
-    #     elif self.current_state == INSTRUCTIONS_PAGE_1:
-    #         # Start the game
-    #         self.setup()
-    #         self.current_state = GAME_RUNNING
-    #     elif self.current_state == GAME_OVER:
-    #         # Restart the game.
-    #         self.setup()
-    #         self.current_state = GAME_RUNNING
-
-
+        # if self.current_state == INSTRUCTIONS_PAGE_0:
+        #     # Next page of instructions.
+        #     self.current_state = INSTRUCTIONS_PAGE_1
+        # elif self.current_state == INSTRUCTIONS_PAGE_1:
+        #     # Start the game
+        #     self.setup()
+        #     self.current_state = GAME_RUNNING
+        # elif self.current_state == GAME_OVER:
+        #     # Restart the game.
+        #     self.setup()
+        #     self.current_state = GAME_RUNNING
 
 
     #add margin to prevent the plane from going of the screen
@@ -843,11 +840,14 @@ class MyGame(arcade.Window):
         if key == arcade.key.Z:
             laser_bomb = False
 
+
 # Variables to record if certain keys are being pressed.
 up_pressed = False
 down_pressed = False
 left_pressed = False
 right_pressed = False
+
+# arcade.play_sound(background_sound)
 
 
 def main():
