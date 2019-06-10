@@ -1,7 +1,46 @@
 import arcade
 import math
 import random
-from variables import *
+
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+SCREEN_TITLE = "Python Arcade Game: StormPlane"
+BULLET_SPEED = 2
+Score = 0
+
+INSTRUCTIONS_PAGE_0 = 0
+INSTRUCTIONS_PAGE_1 = 1
+GAME_RUNNING = 2
+GAME_OVER = 3
+WIN = 4
+
+position_y_1 = 600
+position_y_2 = 0
+
+explode = 0
+explode_x = 0
+explode_y = 0
+fps = 0
+boss_create_fps = 0
+
+level = 0
+# boss level prompt
+prompt = False
+prompt_time = 0
+
+boss_hp = 0
+boss_hp_current = 0
+
+laser_bomb = False
+laser_effect = 0
+laser_fps = 0
+
+# Calculate the remaining missile
+laser_counter = 0
+laser_counter_update = 0
+
+background_sound = arcade.load_sound("music/supply.wav")
+
 
 
 class Enemy(arcade.Sprite):
@@ -487,7 +526,7 @@ class MyGame(arcade.Window):
                         self.enemy_list.append(enemy)
 
                 # create a boss and ensure no small enemies appear during the boss battle
-                elif self.frame_count - fps == (1799*(level+1)) and not self.boss and not 1 <= explode <= 4:
+                elif self.frame_count - fps == (199*(level+1)) and not self.boss and not 1 <= explode <= 4:
                     # 提示
                     boss_create_fps = self.frame_count
                     prompt = True
@@ -792,7 +831,7 @@ class MyGame(arcade.Window):
                     e.drop()
 
                 if level == 4:
-                    self.current_state = GAME_OVER
+                    self.current_state = WIN
                     self.set_mouse_visible(True)
 
                 self.bullet_list.update()
@@ -822,6 +861,8 @@ class MyGame(arcade.Window):
         #     self.setup()
         #     self.current_state = GAME_RUNNING
     def on_mouse_press(self, x, y, button, modifiers):
+        global level
+        global Score
         """
         Called when the user presses a mouse button.
         """
@@ -838,11 +879,14 @@ class MyGame(arcade.Window):
             self.current_state = GAME_RUNNING
         elif self.current_state == GAME_OVER:
             # Restart the game.
+            level = 0
+            Score =0
             self.setup()
             self.current_state = GAME_RUNNING
         elif self.current_state == WIN:
             # Restart the game.
             level = 0
+            Score =0
             self.setup()
             self.current_state = GAME_RUNNING
 
