@@ -21,21 +21,23 @@ class MyGame(arcade.Window):
     """
 
     def __init__(self, screen_width, screen_height, title):
-        """ Constructor """
-        # Call the parent constructor. Required and must be the first line.
+
+
         super().__init__(screen_width, screen_height, title)
 
-        # Set the working directory (where we expect to find files) to the same
-        # directory this .py file is in. You can leave this out of your own
-        # code, but it is needed to easily run the examples using "python -m"
-        # as mentioned at the top of this program.
+
         file_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(file_path)
 
-        # Set the background color
+        self.instructions = []
+        texture = arcade.load_texture("images/fm.jpeg")
+        self.instructions.append(texture)
+        texture = arcade.load_texture("images/intro.jpeg")
+        self.instructions.append(texture)
+
         arcade.set_background_color(arcade.color.AMAZON)
 
-        # Start 'state' will be showing the first page of instructions.
+
         self.current_state = INSTRUCTIONS_PAGE_0
 
         self.player_list = None
@@ -51,11 +53,7 @@ class MyGame(arcade.Window):
         # each level.
 
 
-        self.instructions = []
-        texture = arcade.load_texture("images/fm.jpeg")
-        self.instructions.append(texture)
-        texture = arcade.load_texture("images/intro.jpeg")
-        self.instructions.append(texture)
+
 
 
 
