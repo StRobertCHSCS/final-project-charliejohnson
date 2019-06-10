@@ -21,7 +21,7 @@ explode_y = 0
 fps = 0
 boss_create_fps = 0
 
-level = 3
+level = 0
 # boss level prompt
 prompt = False
 prompt_time = 0
