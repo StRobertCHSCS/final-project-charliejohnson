@@ -344,7 +344,7 @@ class MyGame(arcade.Window):
         arcade.draw_text("HP: {0:10.2f}%".format(self.hp), 180, 562, arcade.color.WHITE, 12)
         if self.laser_player >= 1:
             for i in range(self.laser_player):
-                arcade.draw_texture_rectangle(760 - i * 50, 520, 50, 40, arcade.load_texture("images/star.png"))
+                arcade.draw_texture_rectangle(760 - i * 50, 520, 50, 40, arcade.load_texture("images/missile_icon.png"))
 
 
 
@@ -424,7 +424,7 @@ class MyGame(arcade.Window):
             else:
                 # drop hp bonus every 60s
                 if self.frame_count % 3600 == 3599:
-                    bonus_hp = arcade.Sprite("images/award2.png", 0.6)
+                    bonus_hp = arcade.Sprite("images/hp_bonus.png", 0.6)
                     bonus_hp.center_x = random.randrange(0, SCREEN_WIDTH)
                     bonus_hp.center_y = random.randrange(SCREEN_HEIGHT, SCREEN_HEIGHT * 1.25)
                     self.bonus.append(bonus_hp)
@@ -619,7 +619,7 @@ class MyGame(arcade.Window):
                     # Shoot every 60 frames change of shooting each frame
                     # if self.frame_count % (120 - 20*level) == 0:
                     #     if self.boss:
-                    #         bullet = arcade.Sprite("images/boss_bomb.png", 0.5)
+                    #         bullet = arcade.Sprite("images/enemy_bullet.png", 0.5)
                     #     else:
                     #         bullet = arcade.Sprite("images/Bomb1.png", 0.5)
                     #     bullet.center_x = start_x
@@ -641,7 +641,7 @@ class MyGame(arcade.Window):
                     #     self.bullet_list.append(bullet)
 
                     if self.boss and self.frame_count % ((120 - 20 * level) // 2) == 0:
-                        bullet = arcade.Sprite("images/boss_bomb.png", 0.5)
+                        bullet = arcade.Sprite("images/boss_bullet.png", 0.5)
                         bullet.center_x = start_x
                         bullet.center_y = start_y
                         bullet.angle = 0
@@ -649,7 +649,7 @@ class MyGame(arcade.Window):
                         bullet.change_y = - BULLET_SPEED * (level//3 + 1)
                         self.bullet_list.append(bullet)
                     elif self.frame_count % (120 - 20*level) == 0:
-                        bullet = arcade.Sprite("images/Bomb1.png", 0.5)
+                        bullet = arcade.Sprite("images/enemy_bullet.png", 0.5)
                         bullet.center_x = start_x
                         bullet.center_y = start_y
                         bullet.angle = math.degrees(angle)

@@ -2,20 +2,20 @@ import arcade
 import math
 import random
 
+# default window
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Python Arcade Game: StormPlane"
 BULLET_SPEED = 2
 Score = 0
-
 INSTRUCTIONS_PAGE_0 = 0
 INSTRUCTIONS_PAGE_1 = 1
 GAME_RUNNING = 2
 GAME_OVER = 3
-
 position_y_1 = 600
 position_y_2 = 0
 
+# default boss' properties
 explode = 0
 explode_x = 0
 explode_y = 0
@@ -30,6 +30,7 @@ prompt_time = 0
 boss_hp = 0
 boss_hp_current = 0
 
+# default boss laser
 laser_bomb = False
 laser_effect = 0
 laser_fps = 0
@@ -140,6 +141,23 @@ class MyGame(arcade.Window):
         self.assist = None
         self.bonus = None
 
+    def setup(self):
+        """
+        Initialize game interface. Default schedule is 60 fps.
+        :return: None
+        """
+        arcade.schedule(self.on_update, 1 / 60)
+        self.enemy_list = arcade.SpriteList()
+        self.bullet_list = arcade.SpriteList()
+        self.player_list = arcade.SpriteList()
+        self.bullet_self_list = arcade.SpriteList()
+        self.assist = arcade.SpriteList()
+        self.bonus = arcade.SpriteList()
+
+        # Add player ship
+        self.player = arcade.Sprite("images/SeHero.png", 0.6)
+
+        self.player_list.append(self.player)
 
         # self.current_state = INSTRUCTIONS_PAGE_0
 
@@ -191,23 +209,23 @@ class MyGame(arcade.Window):
             texture_0 = arcade.load_texture("images/boss_2.png")
 
         if level == 1:
-            texture_1 = arcade.load_texture("images/bg_1.jpg")
+            texture_1 = arcade.load_texture("images/bg_new.jpg")
             arcade.draw_texture_rectangle(400, position_y_1, 800, 600, texture_1)
-            texture_2 = arcade.load_texture("images/bg_1.jpg")
+            texture_2 = arcade.load_texture("images/bg_new.jpg")
             arcade.draw_texture_rectangle(400, position_y_2, 800, 600, texture_1)
             texture_0 = arcade.load_texture("images/boss_4.png")
 
         if level == 2:
-            texture_1 = arcade.load_texture("images/bg6.jpg")
+            texture_1 = arcade.load_texture("images/bg_1.jpg")
             arcade.draw_texture_rectangle(400, position_y_1, 800, 600, texture_1)
-            texture_2 = arcade.load_texture("images/bg6.jpg")
+            texture_2 = arcade.load_texture("images/bg_1.jpg")
             arcade.draw_texture_rectangle(400, position_y_2, 800, 600, texture_1)
             texture_0 = arcade.load_texture("images/boss_1.png")
 
         if level == 3:
-            texture_1 = arcade.load_texture("images/bg4.jpg")
+            texture_1 = arcade.load_texture("images/bg_new_1.jpg")
             arcade.draw_texture_rectangle(400, position_y_1, 800, 600, texture_1)
-            texture_2 = arcade.load_texture("images/bg4.jpg")
+            texture_2 = arcade.load_texture("images/bg_new_1.jpg")
             arcade.draw_texture_rectangle(400, position_y_2, 800, 600, texture_1)
             texture_0 = arcade.load_texture("images/boss_5.png")
 
@@ -358,27 +376,11 @@ class MyGame(arcade.Window):
         arcade.draw_text("HP: {0:10.2f}%".format(self.hp), 180, 562, arcade.color.WHITE, 12)
         if self.laser_player >= 1:
             for i in range(self.laser_player):
-                arcade.draw_texture_rectangle(760 - i * 50, 520, 50, 40, arcade.load_texture("images/star.png"))
+                arcade.draw_texture_rectangle(750 - i * 50, 520, 50, 40, arcade.load_texture("images/missile_icon.png"))
 
 
 
-    def setup(self):
-        """
-        Initialize game interface. Default schedule is 60 fps.
-        :return: None
-        """
-        arcade.schedule(self.on_update, 1/60)
-        self.enemy_list = arcade.SpriteList()
-        self.bullet_list = arcade.SpriteList()
-        self.player_list = arcade.SpriteList()
-        self.bullet_self_list = arcade.SpriteList()
-        self.assist = arcade.SpriteList()
-        self.bonus = arcade.SpriteList()
 
-        # Add player ship
-        self.player = arcade.Sprite("images/SeHero.png", 0.6)
-
-        self.player_list.append(self.player)
 
     #     self.set_mouse_visible(False)
     #
@@ -439,13 +441,13 @@ class MyGame(arcade.Window):
             else:
                 # drop hp bonus every 60s
                 if self.frame_count % 3600 == 3599:
-                    bonus_hp = arcade.Sprite("images/award2.png", 0.6)
+                    bonus_hp = arcade.Sprite("images/hp_bonus.png", 0.45)
                     bonus_hp.center_x = random.randrange(0, SCREEN_WIDTH)
                     bonus_hp.center_y = random.randrange(SCREEN_HEIGHT, SCREEN_HEIGHT * 1.25)
                     self.bonus.append(bonus_hp)
 
                 if self.frame_count % 180 == 0 and not self.boss and not 1 <= explode <= 4:
-                    for _ in range(2):
+                    for _ in range(3):
                     # generate randomly enemy planes of different levels
                         ranNum = random.randint(0, 1000)
                         if ranNum < 500:
@@ -453,7 +455,7 @@ class MyGame(arcade.Window):
                         elif ranNum < 850:
                             enemy = Enemy("images/bigplane0.png", 0.7, 3, 50, 3, False)
                         else:
-                            enemy = Enemy("images/boss0.png", 0.35, 5, 100, 2, False)
+                            enemy = Enemy("images/boss0.png", 0.35, 4, 100, 2, False)
 
 
                         enemy.center_x = random.randrange(0, SCREEN_WIDTH)
@@ -476,7 +478,7 @@ class MyGame(arcade.Window):
                     elif level == 2:
                         enemy = Enemy("images/boss_1.png", 0.8, 40, 2000, 3, True)
                     elif level == 3:
-                        enemy = Enemy("images/boss_5.png", 0.8, 50, 4000, 3, True)
+                        enemy = Enemy("images/boss_5.png", 0.8, 100, 4000, 3, True)
 
 
                     enemy.center_x = random.randrange(0, SCREEN_WIDTH)
@@ -624,16 +626,16 @@ class MyGame(arcade.Window):
                     y_diff = dest_y - start_y
                     angle = math.atan2(y_diff, x_diff)
 
-                    # use if statement to exclude the boss angle
+                    # use if statements to exclude the boss angle
                     if self.boss:
                         enemy.angle = 0
                     else:
-                        enemy.angle = math.degrees(angle)-90
+                        enemy.angle = math.degrees(angle)-270
 
                     # Shoot every 60 frames change of shooting each frame
                     # if self.frame_count % (120 - 20*level) == 0:
                     #     if self.boss:
-                    #         bullet = arcade.Sprite("images/boss_bomb.png", 0.5)
+                    #         bullet = arcade.Sprite("images/enemy_bullet.png", 0.5)
                     #     else:
                     #         bullet = arcade.Sprite("images/Bomb1.png", 0.5)
                     #     bullet.center_x = start_x
@@ -656,15 +658,15 @@ class MyGame(arcade.Window):
 
                     # determine the shooting characteristics of enemy / boss planes
                     if self.boss and self.frame_count % ((120 - 20 * level) // 2) == 0:
-                        bullet = arcade.Sprite("images/boss_bomb.png", 0.5)
+                        bullet = arcade.Sprite("images/boss_bullet.png", 0.5)
                         bullet.center_x = start_x
                         bullet.center_y = start_y
                         bullet.angle = 0
                         bullet.change_x = 0
                         bullet.change_y = - BULLET_SPEED * (level//3 + 1)
                         self.bullet_list.append(bullet)
-                    elif self.frame_count % (120 - 20*level) == 0:
-                        bullet = arcade.Sprite("images/Bomb1.png", 0.5)
+                    elif self.frame_count % (120 - 25*level) == 0:
+                        bullet = arcade.Sprite("images/enemy_bullet.png", 0.6)
                         bullet.center_x = start_x
                         bullet.center_y = start_y
                         bullet.angle = math.degrees(angle)

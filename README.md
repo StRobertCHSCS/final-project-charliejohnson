@@ -39,10 +39,10 @@
 | boss_level_3  | 2000  |![boss_enemy_3](images/boss_3_new.png) |
 | boss_level_4  | 4000  |![boss_enemy_4](images/boss_4_new.png) |
 
-* Every time the player's score increased by 1000, a star-shaped icon would show up on the screen, representing the remaining amount of laser beam.
+* Every time the player's score increased by 1000, a missile icon would show up on the screen, representing the remaining amount of laser beam.
 
 ## Screen Mock-Ups
-* These are some actual screenshots of our game 
+* These are some initial screenshots of our game 
 
 ![S_0](images/S_0.jpeg)
 ![S_1](images/S_1.jpeg)
