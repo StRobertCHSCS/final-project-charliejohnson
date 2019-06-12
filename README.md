@@ -17,7 +17,7 @@
 
 * At the end of each level, the boss enemy would appear from the top of the screen after a "boss warning" prompt. During the boss battle, player must use their strategies to defeat the boss in order to level up.
 
-* The game is divided by 4 levels. As level goes up, different attributes of enemy planes would relatively increase from the previous level. (e.x The speed of the enemy planes, HP values).
+* The game is divided by 4 levels. As level goes up, different attributes of enemy planes would relatively increase from the previous level. (e.x The speed of the enemy planes, HP values). However, the player airplane's shooting speed also increases as level goes up.  
 
 * When the player defeats the final boss at the end of level 4, a "Victory" message would pop up the screen, which signals to the victory of the game.
 

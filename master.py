@@ -160,7 +160,7 @@ class MyGame(arcade.Window):
         arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, page_texture.width, page_texture.height, page_texture, 0)
         if self.current_state == INSTRUCTIONS_PAGE_0:
             page_texture = arcade.load_texture("images/play.png")
-            arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, 150, page_texture.width, page_texture.height, page_texture, 0)
+            arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, 200, page_texture.width, page_texture.height, page_texture, 0)
 
     # draw game over page
     def draw_game_over(self):
@@ -168,10 +168,10 @@ class MyGame(arcade.Window):
         Draw "Game over" across the screen.
         """
         output = "Game Over"
-        arcade.draw_text(output, 240, 400, arcade.color.WHITE, 54)
+        arcade.draw_text(output, 220, 350, arcade.color.WHITE, 54)
 
-        output = "Click any where to restart"
-        arcade.draw_text(output, 235, 300, arcade.color.WHITE, 24)
+        output = "Click anywhere to restart"
+        arcade.draw_text(output, 225, 260, arcade.color.WHITE, 24)
 
     def draw_game_win(self):
         texture = arcade.load_texture("images/win_page.jpeg")
@@ -482,9 +482,9 @@ class MyGame(arcade.Window):
         if level == 4:
             self.current_state = WIN
             return
-        if True:
+        if self.current_state == GAME_RUNNING:
             # update remaining laser based on current score
-            laser_counter = Score // 1000 + 1
+            laser_counter = Score // 1000
             if laser_counter + laser_counter_update == 1:
                 self.laser_player += 1
                 laser_counter_update -= 1
@@ -500,8 +500,8 @@ class MyGame(arcade.Window):
                     bonus_hp.center_y = random.randrange(SCREEN_HEIGHT, SCREEN_HEIGHT * 1.25)
                     self.bonus.append(bonus_hp)
 
-                if self.frame_count % 180 == 0 and not self.boss and not 1 <= explode <= 4:
-                    for _ in range(3):
+                if self.frame_count % 240 == 0 and not self.boss and not 1 <= explode <= 4:
+                    for _ in range(2 + level):
                     # generate randomly enemy planes of different levels
                         ranNum = random.randint(0, 1000)
                         if ranNum < 500:
@@ -682,7 +682,7 @@ class MyGame(arcade.Window):
                     if self.boss:
                         enemy.angle = 0
                     else:
-                        enemy.angle = math.degrees(angle)-90
+                        enemy.angle = math.degrees(angle)-270
 
                     # Shoot every 60 frames change of shooting each frame
                     # if self.frame_count % (120 - 20*level) == 0:
@@ -727,7 +727,7 @@ class MyGame(arcade.Window):
                         self.bullet_list.append(bullet)
 
                 # determine the shooting frequency of the player airplane
-                if self.frame_count % 15 == 0:
+                if self.frame_count % (15 - 2*level) == 0:
                     bullet = arcade.Sprite("images/Bomb2.png", 0.7)
                     bullet.center_x = self.player.center_x
                     bullet.center_y = self.player.center_y
@@ -866,8 +866,8 @@ class MyGame(arcade.Window):
             self.current_state = INSTRUCTIONS_PAGE_1
         elif self.current_state == INSTRUCTIONS_PAGE_1:
             # Start the game
-            self.setup()
             self.current_state = GAME_RUNNING
+            self.setup()
         elif self.current_state == GAME_OVER:
             # Restart the game.
             level = 0
@@ -901,7 +901,6 @@ class MyGame(arcade.Window):
             laser_effect = 0
             laser_fps = 0
 
-            # Calculate the remaining missile
             laser_counter = 0
             laser_counter_update = 0
             self.setup()
