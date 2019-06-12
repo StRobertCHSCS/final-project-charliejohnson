@@ -883,9 +883,9 @@ class MyGame(arcade.Window):
             laser_effect = 0
             laser_fps = 0
 
-            # Calculate the remaining missile
             laser_counter = 0
             laser_counter_update = 0
+
             self.setup()
             self.current_state = GAME_RUNNING
         elif self.current_state == WIN:

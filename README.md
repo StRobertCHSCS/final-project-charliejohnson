@@ -13,13 +13,13 @@
 
 * The probability of generating different types of airplanes varies. There is a 50% chance of generating a small enemy plane while the probabilities of generating a medium-sized enemy plane and a large-sized enemy plane are 35% and 15% respectively.
 
-* In the game, a variety of auxiliary props would drop from the top of the screen, such as missiles, bullets, etc. Players can enhance their weaponry through props.
+* In the game, auxiliary props would drop from the top of the screen, such as missiles, bullets, etc. Players can enhance their weaponry through props.
 
 * At the end of each level, the boss enemy would appear from the top of the screen after a "boss warning" prompt. During the boss battle, player must use their strategies to defeat the boss in order to level up.
 
 * The game is divided by 4 levels. As level goes up, different attributes of enemy planes would relatively increase from the previous level. (e.x The speed of the enemy planes, HP values).
 
-* When the player defeats the final boss at the end of level 4, a "Victory" message would pop up the screen, which signals to the victory of the game. Besides, the scoring and time would show up on the ending page.
+* When the player defeats the final boss at the end of level 4, a "Victory" message would pop up the screen, which signals to the victory of the game.
 
 * The HP bonus icon would drop from the top of the screen every 60s. When the player airplane catches the HP bonus, its health value would automatically increase by 30.
 
@@ -55,7 +55,7 @@
 ![S_8](images/S_8.jpeg)
 ![S_9](images/S_9.jpeg)
 ![S_10](images/S_10.jpeg)
-![S_11](images/S_11.jpeg)
+![S_11](images/win_page.jpeg)
 
 
 
