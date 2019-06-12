@@ -23,7 +23,7 @@
 
 * The HP bonus icon would drop from the top of the screen every 60s. When the player airplane catches the HP bonus, its health value would automatically increase by 30.
 
-* Operating Instruction: Use "W" key for Up; "A" key for Left; "D" key for Right; "S" key for Down; "Z" key for Missile Shooting. 
+* Operating Instruction: Use "W" key for Up; "A" key for Left; "D" key for Right; "S" key for Down; "Z" key for Missile Shooting.
 
 ## Scoring 
 

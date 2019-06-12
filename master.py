@@ -40,7 +40,7 @@ laser_fps = 0
 laser_counter = 0
 laser_counter_update = 0
 
-background_sound = arcade.load_sound("music/supply.wav")
+background_sound = arcade.load_sound("music/action_world5.mp3")
 
 
 class Enemy(arcade.Sprite):
@@ -954,6 +954,7 @@ up_pressed = False
 down_pressed = False
 left_pressed = False
 right_pressed = False
+
 
 arcade.play_sound(background_sound)
 

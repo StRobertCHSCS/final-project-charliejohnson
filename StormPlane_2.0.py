@@ -40,7 +40,7 @@ laser_fps = 0
 laser_counter = 0
 laser_counter_update = 0
 
-background_sound = arcade.load_sound("music/supply.wav")
+background_sound = arcade.load_sound("music/menu.mp3")
 
 
 class Enemy(arcade.Sprite):
