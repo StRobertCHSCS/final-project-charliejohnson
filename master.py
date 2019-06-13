@@ -1,6 +1,7 @@
 import arcade
 import math
 import random
+import pyglet
 
 # default window
 SCREEN_WIDTH = 800
@@ -141,6 +142,7 @@ class MyGame(arcade.Window):
         self.player = None
         self.assist = None
         self.bonus = None
+
 
         self.instructions = []
         texture = arcade.load_texture("images/fm.jpeg")
@@ -418,6 +420,10 @@ class MyGame(arcade.Window):
         self.player = None
         self.assist = None
         self.bonus = None
+
+        arcade.play_sound(background_sound)
+        if self.current_state == GAME_RUNNING:
+           background_sound.pause()
 
         arcade.schedule(self.on_update, 1/60)
         self.enemy_list = arcade.SpriteList()
@@ -741,6 +747,7 @@ class MyGame(arcade.Window):
                     bullet.change_y = BULLET_SPEED * 3
 
                     self.bullet_self_list.append(bullet)
+                    arcade.play_sound(bullet_sound)
 
                 # use loops to remove the bullet when it flies off-screen
                 for bullet in self.bullet_self_list:
@@ -858,8 +865,6 @@ class MyGame(arcade.Window):
         Called when the user presses a mouse button.
         """
 
-        arcade.play_sound(background_sound)
-
         # Change states as needed.
         if self.current_state == INSTRUCTIONS_PAGE_0 and x >= 280 and x  <= 520 and y >= 102  and y <= 198 :
             # Next page of instructions.
@@ -868,6 +873,7 @@ class MyGame(arcade.Window):
             # Start the game
             self.current_state = GAME_RUNNING
             self.setup()
+
         elif self.current_state == GAME_OVER:
             # Restart the game.
             level = 0
@@ -955,8 +961,6 @@ down_pressed = False
 left_pressed = False
 right_pressed = False
 
-
-arcade.play_sound(background_sound)
 
 
 def main():
