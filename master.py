@@ -46,6 +46,7 @@ welcome_page_sound = arcade.load_sound("music/action_world1.wav")
 button_sound = arcade.load_sound("music/button.wav")
 laser_bomb_sound = arcade.load_sound("music/short_lazer.wav")
 reload_sound = arcade.load_sound("music/rocketswitch_1.wav")
+supply_sound = arcade.load_sound("music/supply.wav")
 
 
 
@@ -501,6 +502,7 @@ class MyGame(arcade.Window):
             if laser_counter + laser_counter_update == 1:
                 self.laser_player += 1
                 laser_counter_update -= 1
+                arcade.play_sound(reload_sound)
 
             if self.hp <= 0:
                 self.dead()
@@ -776,6 +778,7 @@ class MyGame(arcade.Window):
                     # update player's hp when it catches hp_bonus
                     if arcade.check_for_collision(self.player, hp_bonus):
                         self.hp = min(100, self.hp + 30)
+                        arcade.play_sound(supply_sound)
                         hp_bonus.kill()
                     # remove hp_bonus when it gets out of windows
                     if hp_bonus.top < 0:
@@ -965,7 +968,6 @@ class MyGame(arcade.Window):
             right_pressed = False
         if key == arcade.key.Z:
             laser_bomb = False
-            arcade.play_sound(reload_sound)
 
 
 # Variables to record if certain keys are being pressed.
