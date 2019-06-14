@@ -40,7 +40,14 @@ laser_fps = 0
 laser_counter = 0
 laser_counter_update = 0
 
-background_sound = arcade.load_sound("music/action_world5.mp3")
+background_sound = arcade.load_sound("music/game_music.wav")
+all_bomb_sound = arcade.load_sound("music/all_bomb.wav")
+welcome_page_sound = arcade.load_sound("music/action_world1.wav")
+button_sound = arcade.load_sound("music/button.wav")
+laser_bomb_sound = arcade.load_sound("music/short_lazer.wav")
+reload_sound = arcade.load_sound("music/rocketswitch_1.wav")
+
+
 
 
 class Enemy(arcade.Sprite):
@@ -150,6 +157,7 @@ class MyGame(arcade.Window):
 
         self.current_state = INSTRUCTIONS_PAGE_0
 
+
     # draw instruction page
     def draw_instructions_page(self, page_number):
         """
@@ -161,6 +169,7 @@ class MyGame(arcade.Window):
         if self.current_state == INSTRUCTIONS_PAGE_0:
             page_texture = arcade.load_texture("images/play.png")
             arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, 200, page_texture.width, page_texture.height, page_texture, 0)
+
 
     # draw game over page
     def draw_game_over(self):
@@ -482,7 +491,11 @@ class MyGame(arcade.Window):
         if level == 4:
             self.current_state = WIN
             return
+
         if self.current_state == GAME_RUNNING:
+            if self.frame_count % 2840 == 0 or self.frame_count / 2940 == 0 :
+                arcade.play_sound(background_sound)
+
             # update remaining laser based on current score
             laser_counter = Score // 1000
             if laser_counter + laser_counter_update == 1:
@@ -596,6 +609,7 @@ class MyGame(arcade.Window):
                 for collide_bullet in bullet_collide_list:
                     collide_bullet.kill()
                     self.hp = max(0, self.hp - 5)
+                    arcade.play_sound(all_bomb_sound)
 
                 # collision with enemy
                 enemy_collide_list = arcade.check_for_collision_with_list(self.player, self.enemy_list)
@@ -604,6 +618,7 @@ class MyGame(arcade.Window):
                     if self.boss:
                         self.hp = 0
                     self.hp = max(0, self.hp - 30)
+                    arcade.play_sound(all_bomb_sound)
 
 
                 # calculate different damage of player's bullet or bomb makes on enemy or boss
@@ -779,6 +794,8 @@ class MyGame(arcade.Window):
                 # trigger the missile
                 if laser_bomb and self.laser_player > 0 and len(self.assist) <= 1:
 
+                    arcade.play_sound(laser_bomb_sound)
+
 
                     assist_bomb = arcade.Sprite("images/assisent1_1.png", 1)
                     assist_bomb.center_x = self.player.center_x - 25
@@ -796,6 +813,7 @@ class MyGame(arcade.Window):
                     assist_bomb.change_y = 10
                     self.assist.append(assist_bomb)
                     self.laser_player -= 1
+                    # arcade.play_sound(reload_sound)
 
                 # use if statement to set the laser shooting period to be 8s
                 if self.boss and (self.frame_count - boss_create_fps) % 480 == 0 and (self.frame_count - boss_create_fps) != 0:
@@ -858,10 +876,10 @@ class MyGame(arcade.Window):
         Called when the user presses a mouse button.
         """
 
-        arcade.play_sound(background_sound)
 
         # Change states as needed.
-        if self.current_state == INSTRUCTIONS_PAGE_0 and x >= 280 and x  <= 520 and y >= 102  and y <= 198 :
+        if self.current_state == INSTRUCTIONS_PAGE_0 and x >= 280 and x  <= 520 and y >= 147  and y <= 253 :
+            arcade.play_sound(button_sound)
             # Next page of instructions.
             self.current_state = INSTRUCTIONS_PAGE_1
         elif self.current_state == INSTRUCTIONS_PAGE_1:
@@ -947,6 +965,7 @@ class MyGame(arcade.Window):
             right_pressed = False
         if key == arcade.key.Z:
             laser_bomb = False
+            arcade.play_sound(reload_sound)
 
 
 # Variables to record if certain keys are being pressed.
@@ -956,7 +975,6 @@ left_pressed = False
 right_pressed = False
 
 
-arcade.play_sound(background_sound)
 
 
 def main():

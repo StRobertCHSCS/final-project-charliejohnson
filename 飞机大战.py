@@ -40,7 +40,9 @@ laser_counter = 0
 laser_counter_update = 0
 
 
-background_sound = arcade.load_sound("music/menu.mp3")
+background_sound = arcade.load_sound("music/game_music.wav")
+
+
 
 class Enemy(arcade.Sprite):
     # pass attribute to enemy
@@ -431,6 +433,10 @@ class MyGame(arcade.Window):
 
         if True:
             # update remaining laser based on current score
+            if self.frame_count == 2940:
+                arcade.play_sound(background_sound)
+
+
             laser_counter = Score // 1000 + 1
             if laser_counter + laser_counter_update == 1:
                 self.laser_player += 1
@@ -848,8 +854,6 @@ up_pressed = False
 down_pressed = False
 left_pressed = False
 right_pressed = False
-
-# arcade.play_sound(background_sound)
 
 
 def main():
