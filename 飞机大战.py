@@ -39,9 +39,6 @@ laser_fps = 0
 laser_counter = 0
 laser_counter_update = 0
 
-
-background_sound = arcade.load_sound("music/menu.mp3")
-
 class Enemy(arcade.Sprite):
     # pass attribute to enemy
     def __init__(self, image, scale, ehp, score, speed, boss):
@@ -61,25 +58,6 @@ class Enemy(arcade.Sprite):
         self.speed = speed
         self.boss = boss
         self.left_boss = True
-
-
-    # self armo damage, hhp
-    def hitted(self, hhp):
-        """
-        Enemy hit by self bullet. Return boss kill information and killed coordinates.
-
-        :param hhp: self bullet damage to the enemy
-        :return: Tuple, represents boss killed(1), otherwise(0); killed xy coordinates in order.
-        """
-        global Score
-        self.ehp = max(0, self.ehp - hhp)
-        if self.ehp == 0:
-            self.kill()
-            Score += self.score
-            if self.boss:
-
-                return (1, self.center_x, self.center_y)
-        return (0, 0, 0)
 
     def drop(self):
         """
@@ -110,6 +88,24 @@ class Enemy(arcade.Sprite):
         if self.center_y < 0:
             self.kill()
 
+
+    # self armo damage, hhp
+    def hitted(self, hhp):
+        """
+        Enemy hit by player bullet. Return boss killed information and killed coordinates.
+
+        :param hhp: self bullet damage to the enemy
+        :return: Tuple, represents boss killed(1), otherwise(0); killed xy coordinates in order.
+        """
+        global Score
+        self.ehp = max(0, self.ehp - hhp)
+        if self.ehp == 0:
+            self.kill()
+            Score += self.score
+            if self.boss:
+
+                return (1, self.center_x, self.center_y)
+        return (0, 0, 0)
 
 class MyGame(arcade.Window):
     """ Main application class """
@@ -184,8 +180,6 @@ class MyGame(arcade.Window):
         global Score, position_y_1, position_y_2, level, prompt, boss_hp, boss_hp_current, laser_effect, INSTRUCTIONS_PAGE_0, INSTRUCTIONS_PAGE_1
         global GAME_RUNNING, GAME_OVER
         arcade.start_render()
-        texture_0 = arcade.load_texture("images/bigairplane3.png")
-
 
         # if self.current_state == INSTRUCTIONS_PAGE_0:
         #     self.draw_instructions_page(0)
@@ -848,8 +842,6 @@ up_pressed = False
 down_pressed = False
 left_pressed = False
 right_pressed = False
-
-# arcade.play_sound(background_sound)
 
 
 def main():

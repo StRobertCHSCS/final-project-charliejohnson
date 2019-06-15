@@ -3,23 +3,20 @@
 * The StormPlane is a simple and addicting 2D aircraft shooting game where you play the role of a brave and daring fighter pilot. Dodge and weave your way around a war zone as you try to avoid enemy fire from all angles to survive. Destroy as many enemy aircraft as you can in this adventure to get higher scores. Your final goal of this game is to get through all the levels and score as many points as possible. Good luck brave Fighter Pilot! 
 
 ## Game Instructions
-* On the main menu screen, Click "Start" button to start the action.
+* On the main menu screen, Click the "Start" button to begin.
 
-* The aircraft will automatically shoot bullets. Players only need to use the keyboard or touchpad to change the direction of the airplane.
-
-* The initial HP value for the player airplane is 100. This health value would get deducted based on the objects that it collides with. Every time the player airplane collides with a bullet from the enemy plane, its HP value would decrease by 5. When the player plane encounters the boss bullets, its HP value gets deducted by 20 (each bullet). If the player airplane collides with enemy plane (except for boss), its HP value would decrease by 30. As the player plane loses all of its HP, a "Game Over" message would pop up the screen, which signals to the player that the game has ended.
+* The aircraft will automatically shoot bullets. Players only need to use the keyboard or touchpad to navigate between enemy planes and bullets.
+* The initial HP value for the player airplane is 100. This health value would get deducted based on the objects that it collides with. Every time the player airplane collides with a bullet from the enemy plane, its HP value would decrease by 5. When the player plane encounters the boss bullets, its HP value gets deducted by 20 (each bullet). If the player airplane collides with enemy plane (except for boss), its HP value would decrease by 30. As the player plane loses all of its HP, the game is over.
 
 * There are several types of enemy airplanes. Each type has its own moving speed, HP, and attack pattern.
 
-* The probability of generating different types of airplanes varies. There is a 50% chance of generating a small enemy plane while the probabilities of generating a medium-sized enemy plane and a large-sized enemy plane are 35% and 15% respectively.
+* The chances of generating small enemy airplanes, medium enemy airplanes, and large enemy airplanes, are 50%, 35%, and 15% respectively. 
 
-* In the game, auxiliary props would drop from the top of the screen, such as missiles, bullets, etc. Players can enhance their weaponry through props.
+* At the end of each level, an enemy boss would appear from the top of the screen. During the boss battle, the player must defeat the boss in order to level up.
 
-* At the end of each level, the boss enemy would appear from the top of the screen after a "boss warning" prompt. During the boss battle, player must use their strategies to defeat the boss in order to level up.
+* The game is divided into 4 levels. As the level goes up, the difficulty would also increase.
 
-* The game is divided by 4 levels. As level goes up, different attributes of enemy planes would relatively increase from the previous level. (e.x The speed of the enemy planes, HP values). However, the player airplane's shooting speed also increases as level goes up.  
-
-* When the player defeats the final boss at the end of level 4, a "Victory" message would pop up the screen, which signals to the victory of the game.
+* When the player defeats the final boss at the end of level 4, the game is won.
 
 * The HP bonus icon would drop from the top of the screen every 60s. When the player airplane catches the HP bonus, its health value would automatically increase by 30.
 
