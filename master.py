@@ -188,7 +188,7 @@ class MyGame(arcade.Window):
         arcade.draw_text(output, 220, 350, arcade.color.WHITE, 54)
 
         output = "Click anywhere to quit"
-        arcade.draw_text(output, 225, 260, arcade.color.WHITE, 24)
+        arcade.draw_text(output, 245, 260, arcade.color.WHITE, 24)
 
     def draw_game_win(self):
         texture = arcade.load_texture("images/win_page.jpeg")
