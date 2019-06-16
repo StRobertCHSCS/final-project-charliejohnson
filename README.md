@@ -42,6 +42,7 @@
 * These are some initial screenshots of our game 
 
 ![S_0](images/S_0.jpeg)
+![S_0_1](images/S_0_1.jpeg)
 ![S_1](images/S_1.jpeg)
 ![S_2](images/S_2.jpeg)
 ![S_3](images/S_3.jpeg)
