@@ -261,7 +261,7 @@ class MyGame(arcade.Window):
             arcade.draw_texture_rectangle(explode_x, explode_y, 90, 90, texture_1)
         elif explode == 4:
             texture_0 = arcade.load_texture("images/bg_road.png")
-            arcade.draw_texture_rectangle(400, 300, 450, 430, texture_0)
+            arcade.draw_texture_rectangle(400, 300, 460, 420, texture_0)
 
         # Draw different boss lasers
         for b in self.enemy_list:
