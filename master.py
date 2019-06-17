@@ -43,22 +43,25 @@ laser_fps = 0
 laser_counter = 0
 laser_counter_update = 0
 
-background_sound = arcade.sound.load_sound("music/bgm_zhuxuanlv.mp3")
-missile_sound_1 = arcade.load_sound("music/rocketswitch.wav")
-hp_bonus_sound = arcade.load_sound("music/supply.wav")
-button_sound = arcade.load_sound("music/button.wav")
-bomb_sound = arcade.load_sound("music/all_bomb.wav")
+try:
+    background_sound = arcade.sound.load_sound("music/bgm_zhuxuanlv.mp3")
+    missile_sound_1 = arcade.load_sound("music/rocketswitch.wav")
+    hp_bonus_sound = arcade.load_sound("music/supply.wav")
+    button_sound = arcade.load_sound("music/button.wav")
+    bomb_sound = arcade.load_sound("music/all_bomb.wav")
 
-game_sound = arcade.sound.load_sound("music/bgm_zhandou2.mp3.wav")
-game_sound_1 = arcade.sound.load_sound("music/bgm_zhandou2.mp3.wav")
-game_sound_2 = arcade.sound.load_sound("music/bgm_zhandou2.mp3.wav")
-game_sound_3 = arcade.sound.load_sound("music/bgm_zhandou2.mp3.wav")
+    game_sound = arcade.sound.load_sound("music/bgm_zhandou2.mp3.wav")
+    game_sound_1 = arcade.sound.load_sound("music/bgm_zhandou2.mp3.wav")
+    game_sound_2 = arcade.sound.load_sound("music/bgm_zhandou2.mp3.wav")
+    game_sound_3 = arcade.sound.load_sound("music/bgm_zhandou2.mp3.wav")
 
-boss_sound_1 = arcade.sound.load_sound("music/boss_sound.wav")
-boss_sound_2 = arcade.sound.load_sound("music/boss_sound.wav")
-boss_sound_3 = arcade.sound.load_sound("music/boss_sound.wav")
-boss_sound_4 = arcade.sound.load_sound("music/boss_sound.wav")
+    boss_sound_1 = arcade.sound.load_sound("music/boss_sound.wav")
+    boss_sound_2 = arcade.sound.load_sound("music/boss_sound.wav")
+    boss_sound_3 = arcade.sound.load_sound("music/boss_sound.wav")
+    boss_sound_4 = arcade.sound.load_sound("music/boss_sound.wav")
 
+except Exception as e:
+    print("Error loading sound.", e)
 
 class Enemy(arcade.Sprite):
     # pass attribute to enemy
@@ -492,9 +495,15 @@ class MyGame(arcade.Window):
         global boss_create_fps, boss_sound_on, game_sound_on, game_sound_1, game_sound_2, game_sound_3, boss_sound_1, boss_sound_2, boss_sound_3, game_sound, boss_sound_4
 
         if self.current_state != GAME_RUNNING and self.frame_count % 3480 == 0:
-            arcade.play_sound(background_sound)
+            try:
+                arcade.play_sound(background_sound)
+            except Exception as e:
+                print("Error playing sound.", e)
         if self.current_state == GAME_RUNNING:
-            background_sound.pause()
+            try:
+                background_sound.pause()
+            except Exception as e:
+                print("Error pausing sound.", e)
 
         if level == 4:
             self.current_state = WIN
@@ -503,42 +512,53 @@ class MyGame(arcade.Window):
 
             if self.boss and boss_sound_on == 0:
                 boss_sound_on = 1
-                if level == 0:
-                    game_sound.pause()
-                    arcade.play_sound(boss_sound_1)
-                if level == 1:
-                    game_sound_1.pause()
-                    arcade.play_sound(boss_sound_2)
-                if level == 2:
-                    game_sound_2.pause()
-                    arcade.play_sound(boss_sound_3)
-                if level == 3:
-                    game_sound_3.pause()
-                    arcade.play_sound(boss_sound_4)
+                try:
+                    if level == 0:
+                        game_sound.pause()
+                        arcade.play_sound(boss_sound_1)
+                    if level == 1:
+                        game_sound_1.pause()
+                        arcade.play_sound(boss_sound_2)
+                    if level == 2:
+                        game_sound_2.pause()
+                        arcade.play_sound(boss_sound_3)
+                    if level == 3:
+                        game_sound_3.pause()
+                        arcade.play_sound(boss_sound_4)
+                except Exception as e:
+                    print("Error pausing sound.", e)
 
             if not self.boss:
-                if level == 0:
-                    boss_sound_1.pause()
-                if level == 1:
-                    boss_sound_2.pause()
-                if level == 2:
-                    boss_sound_3.pause()
-                if level == 3:
-                    boss_sound_4.pause()
+                try:
+                    if level == 0:
+                        boss_sound_1.pause()
+                    if level == 1:
+                        boss_sound_2.pause()
+                    if level == 2:
+                        boss_sound_3.pause()
+                    if level == 3:
+                        boss_sound_4.pause()
+
+                except Exception as e:
+                    print("Error pausing sound.", e)
 
                 boss_sound_on = 0
                 # if (self.frame_count - fps) == 180 and fps != 0:
                 #     game_sound_on = 0
 
             if game_sound_on == 0:
-                if level == 0:
-                    arcade.play_sound(game_sound)
-                if level == 1:
-                    arcade.play_sound(game_sound_1)
-                if level == 2:
-                    arcade.play_sound(game_sound_2)
-                if level == 3:
-                    arcade.play_sound(game_sound_3)
+                try:
+                    if level == 0:
+                        arcade.play_sound(game_sound)
+                    if level == 1:
+                        arcade.play_sound(game_sound_1)
+                    if level == 2:
+                        arcade.play_sound(game_sound_2)
+                    if level == 3:
+                        arcade.play_sound(game_sound_3)
+
+                except Exception as e:
+                    print("Error playing sound.", e)
                 game_sound_on = 1
 
             # update remaining laser based on current score
@@ -550,14 +570,18 @@ class MyGame(arcade.Window):
 
             if self.hp <= 0:
                 game_sound_on = 10
-                game_sound.pause()
-                game_sound_1.pause()
-                game_sound_2.pause()
-                game_sound_3.pause()
-                boss_sound_1.pause()
-                boss_sound_2.pause()
-                boss_sound_3.pause()
-                boss_sound_4.pause()
+                try:
+                    game_sound.pause()
+                    game_sound_1.pause()
+                    game_sound_2.pause()
+                    game_sound_3.pause()
+                    boss_sound_1.pause()
+                    boss_sound_2.pause()
+                    boss_sound_3.pause()
+                    boss_sound_4.pause()
+
+                except Exception as e:
+                    print("Error pausing sound.", e)
 
                 self.dead()
 
