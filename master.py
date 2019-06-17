@@ -199,19 +199,6 @@ class MyGame(arcade.Window):
 
     def draw_game(self):
 
-        # if self.current_state == INSTRUCTIONS_PAGE_0:
-        #     self.draw_instructions_page(0)
-        #
-        # elif self.current_state == INSTRUCTIONS_PAGE_1:
-        #     self.draw_instructions_page(1)
-        #
-        # elif self.current_state == GAME_RUNNING:
-        #     self.draw_game()
-        #
-        # else:
-        #     self.draw_game()
-        #     self.draw_game_over()
-
         # Draw background and boss for each level
         if level == 0:
             texture_1 = arcade.load_texture("images/bg_0.jpg")
@@ -450,33 +437,6 @@ class MyGame(arcade.Window):
 
         self.player_list.append(self.player)
 
-    #     self.set_mouse_visible(False)
-    #
-    # def draw_instructions_page(self, page_number):
-    #
-    #     page_texture = self.instructions[page_number]
-    #     arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, page_texture.width, page_texture.height, page_texture, 0)
-
-    # def draw_game_over(self):
-    #
-    #     output = "Game Over"
-    #     arcade.draw_text(output, 240, 400, arcade.color.WHITE, 54)
-    #
-    #     output = "Click to restart"
-    #     arcade.draw_text(output, 310, 300, arcade.color.WHITE, 24)
-
-    # 掉道具
-    # for _ in range(2):
-    #     # generate random x and y values
-    #     enemy = arcade.Sprite("images/plane.png", 0.5)
-    #     enemy.center_x = random.randrange(0, SCREEN_WIDTH)
-    #     enemy.center_y = random.randrange(SCREEN_HEIGHT, SCREEN_HEIGHT * 2)
-    #     enemy.angle = 180
-    #     self.enemy_list.append(enemy)
-
-    # 子弹与飞机
-    # 吃道具
-
     def dead(self):
         """
         Clear the screen when dead
@@ -658,18 +618,6 @@ class MyGame(arcade.Window):
                             if self.player.center_x - 36 < boss.center_x - 45 < self.player.center_x + 36 or self.player.center_x - 36 < boss.center_x < self.player.center_x + 36 or self.player.center_x - 36 < boss.center_x + 15 < self.player.center_x + 36:
                                 self.hp = max(0, self.hp - 1.1)
 
-                    # for e in self.enemy_list:
-                    #     if self.player.center_x - 40 <= e.center_x <= self.player.center_x + 40:
-                    #         boss_hit = e.hitted(20)
-                    #         if boss_hit[0] == 1:
-                    #             self.boss = False
-                    #
-                    #             lvl_clear = True
-                    #
-                    #             explode = 1
-                    #             explode_x = boss_hit[1]
-                    #             explode_y = boss_hit[2]
-                    #             fps = self.frame_count
 
                 # update the background position
                 position_y_1 -= 1
@@ -774,30 +722,6 @@ class MyGame(arcade.Window):
                         enemy.angle = 0
                     else:
                         enemy.angle = math.degrees(angle) - 270
-
-                    # Shoot every 60 frames change of shooting each frame
-                    # if self.frame_count % (120 - 20*level) == 0:
-                    #     if self.boss:
-                    #         bullet = arcade.Sprite("images/boss_bomb.png", 0.5)
-                    #     else:
-                    #         bullet = arcade.Sprite("images/Bomb1.png", 0.5)
-                    #     bullet.center_x = start_x
-                    #     bullet.center_y = start_y
-                    #
-                    #     # Angle the bullet sprite
-                    #     # Taking into account the angle, calculate our change_x
-                    #     # and change_y. Velocity is how fast the bullet travels.
-                    #     if self.boss:
-                    #         bullet.angle = 0
-                    #         bullet.change_x = 0
-                    #         bullet.change_y = - BULLET_SPEED
-                    #
-                    #     else:
-                    #         bullet.angle = math.degrees(angle)
-                    #         bullet.change_x = math.cos(angle) * BULLET_SPEED
-                    #         bullet.change_y = math.sin(angle) * BULLET_SPEED
-                    #
-                    #     self.bullet_list.append(bullet)
 
                     # determine the shooting characteristics of enemy / boss planes
                     if enemy.boss and self.frame_count % ((120 - 20 * level) // 2) == 0:
@@ -934,17 +858,6 @@ class MyGame(arcade.Window):
         """
         self.player.center_x = x
         self.player.center_y = y
-        # if self.current_state == INSTRUCTIONS_PAGE_0:
-        #     # Next page of instructions.
-        #     self.current_state = INSTRUCTIONS_PAGE_1
-        # elif self.current_state == INSTRUCTIONS_PAGE_1:
-        #     # Start the game
-        #     self.setup()
-        #     self.current_state = GAME_RUNNING
-        # elif self.current_state == GAME_OVER:
-        #     # Restart the game.
-        #     self.setup()
-        #     self.current_state = GAME_RUNNING
 
     def on_mouse_press(self, x, y, button, modifiers):
         global level, Score, prompt, prompt_time, boss_hp, boss_hp_current, laser_bomb, laser_effect, laser_fps, laser_counter, laser_counter_update
@@ -966,7 +879,7 @@ class MyGame(arcade.Window):
         elif self.current_state == GAME_OVER:
             self.close()
 
-
+            # The addition of sound effect would mess up our page transfer
             # Restart the game.
             # level = 0
             # Score = 0
@@ -1006,7 +919,7 @@ class MyGame(arcade.Window):
             # laser_counter_update = 0
             # self.setup()
             # self.current_state = GAME_RUNNING
-    # add margin to prevent the plane from going of the screen
+
     def on_key_press(self, key, modifier):
         """
         Detect user key input when a key is pressed
